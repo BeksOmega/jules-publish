@@ -1,0 +1,40 @@
+name: Jules PR Comment
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  jules_comment:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Post Jules Comment
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO_FULL_NAME: ${{ github.repository }}
+          PR_DESCRIPTION: ${{ github.event.pull_request.body }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/jules_comment.py
+
+      - name: Upload Media Artifact
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: jules-media-artifact
+          path: jules_artifact.*
+          if-no-files-found: ignore
