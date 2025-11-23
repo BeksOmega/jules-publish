@@ -3,6 +3,11 @@ name: Jules PR Comment
 on:
   pull_request:
     types: [opened]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Pull Request Number'
+        required: true
 
 jobs:
   jules_comment:
@@ -24,7 +29,7 @@ jobs:
 
       - name: Post Jules Comment
         env:
-          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_NUMBER: ${{ github.event.pull_request.number || inputs.pr_number }}
           REPO_FULL_NAME: ${{ github.repository }}
           PR_DESCRIPTION: ${{ github.event.pull_request.body }}
           JULES_API_KEY: ${{ secrets.JULES_API_KEY }}

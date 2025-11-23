@@ -15,6 +15,24 @@ def main():
         print("Missing required environment variables.")
         sys.exit(1)
 
+    github_headers = {
+        'Authorization': f'token {github_token}',
+        'Accept': 'application/vnd.github.v3+json'
+    }
+
+    # Fetch PR description if not provided
+    if not pr_description:
+        print("PR description not found in env, fetching from GitHub...")
+        pr_url = f"https://api.github.com/repos/{repo_full_name}/pulls/{pr_number}"
+        try:
+            response = requests.get(pr_url, headers=github_headers)
+            response.raise_for_status()
+            pr_data = response.json()
+            pr_description = pr_data.get('body', '')
+        except Exception as e:
+            print(f"Error fetching PR details: {e}")
+            sys.exit(1)
+
     # Extract session ID
     match = re.search(r'task \[(\d+)\]', pr_description)
     if not match:
@@ -105,10 +123,6 @@ def main():
 
     # Post Comment to GitHub
     github_comment_url = f"https://api.github.com/repos/{repo_full_name}/issues/{pr_number}/comments"
-    github_headers = {
-        'Authorization': f'token {github_token}',
-        'Accept': 'application/vnd.github.v3+json'
-    }
 
     try:
         response = requests.post(github_comment_url, headers=github_headers, json={'body': comment_body})
