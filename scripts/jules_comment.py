@@ -100,22 +100,7 @@ def main():
                  comment_body += f"\n**Latest Media Artifact:**\n\n[Download Media]({media_url})"
         elif 'data' in latest_media:
             # Handle base64 data
-            try:
-                data = latest_media['data']
-                # Decode and save to file for artifact upload
-                # Determine extension from mime type
-                ext = mime_type.split('/')[-1] if '/' in mime_type else 'bin'
-                filename = f"jules_artifact.{ext}"
-
-                with open(filename, "wb") as f:
-                    f.write(base64.b64decode(data))
-
-                print(f"Saved media artifact to {filename}")
-
-                comment_body += f"\n**Latest Media Artifact:**\n\nA media artifact ({mime_type}) was found and has been uploaded as a workflow artifact named `{filename}`."
-            except Exception as e:
-                print(f"Error processing media data: {e}")
-                comment_body += "\n**Latest Media Artifact:**\n\nError processing media artifact data."
+            comment_body += f"\n**Latest Media Artifact:**\n\nA media artifact ({mime_type}) was generated."
         else:
             comment_body += "\n**Latest Media Artifact:**\n\nMedia artifact found but contains no data."
     else:

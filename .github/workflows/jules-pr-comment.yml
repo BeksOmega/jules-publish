@@ -35,11 +35,3 @@ jobs:
           JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python scripts/jules_comment.py
-
-      - name: Upload Media Artifact
-        uses: actions/upload-artifact@v4
-        if: success()
-        with:
-          name: jules-media-artifact
-          path: jules_artifact.*
-          if-no-files-found: ignore
