@@ -1,0 +1,29 @@
+name: Jules PR Comment
+description: 'Post a comment on a PR with details from the associated Jules session.'
+inputs:
+  pr_number:
+    description: 'The Pull Request number'
+    required: true
+  pr_description:
+    description: 'The Pull Request description'
+    required: false
+    default: ''
+  jules_api_key:
+    description: 'The Jules API key'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+    - run: pip install requests
+      shell: bash
+    - run: python "${{ github.action_path }}/scripts/jules_comment.py"
+      shell: bash
+      env:
+        PR_NUMBER: ${{ inputs.pr_number }}
+        REPO_FULL_NAME: ${{ github.repository }}
+        PR_DESCRIPTION: ${{ inputs.pr_description }}
+        JULES_API_KEY: ${{ inputs.jules_api_key }}
+        GITHUB_TOKEN: ${{ github.token }}
