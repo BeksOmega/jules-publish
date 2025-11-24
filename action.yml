@@ -1,5 +1,9 @@
 name: Jules PR Comment
-description: 'Post a comment on a PR with details from the associated Jules session.'
+description: 'Post a comment on a PR with additional details from the associated Jules session.'
+branding:
+  icon: 'message-square'
+  color: 'purple'
+
 inputs:
   pr_number:
     description: 'The Pull Request number'
