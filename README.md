@@ -32,7 +32,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Post Jules Comment
-        uses: owner/repo@main  # Replace with actual repository path
+        uses: BeksOmega/jules-publish@v1.0.0  # Replace with actual repository path
         with:
           pr_number: ${{ github.event.pull_request.number }}
           jules_api_key: ${{ secrets.JULES_API_KEY }}
